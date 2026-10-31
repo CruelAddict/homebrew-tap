@@ -17,22 +17,18 @@ class Resh < Formula
     libexec.install "resh", "resh_Resh.bundle", "resh.lua", "rex-actions.lua",
                     "LICENSE", "THIRD_PARTY_NOTICES.md"
     bin.install_symlink libexec/"resh"
+    (libexec/".resh-prefix").write "#{opt_libexec}\n"
   end
 
   def caveats
     <<~EOS
-      Install and start Rex, then enable Settings → Rex Server → Remote Control.
-      Replace any previous resh integration in your Rex init.lua
-      (normally ~/.config/rex/init.lua) with these lines:
+      Start Rex and enable Settings → Rex Server → Remote Control, then run:
 
-        assert(loadfile("#{opt_libexec}/resh.lua"))("#{opt_bin}/resh")
-        rex.exec.start({ "#{opt_bin}/resh", "service", "start" },
-          { detach = true, stdout = false, stderr = false })
+        resh setup
 
-      Apply with: rex config reload
-      Optional directory sources: brew install zoxide fd
       After upgrading: rex config reload && resh service restart
-      Before uninstalling: resh service stop, then remove the lines above.
+      Before uninstalling: resh service stop, then remove the resh integration
+      from your Rex init.lua.
     EOS
   end
 
