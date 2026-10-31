@@ -22,7 +22,8 @@ class Resh < Formula
   def caveats
     <<~EOS
       Install and start Rex, then enable Settings → Rex Server → Remote Control.
-      Add these lines to your Rex init.lua (normally ~/.config/rex/init.lua):
+      Replace any previous resh integration in your Rex init.lua
+      (normally ~/.config/rex/init.lua) with these lines:
 
         assert(loadfile("#{opt_libexec}/resh.lua"))("#{opt_bin}/resh")
         rex.exec.start({ "#{opt_bin}/resh", "service", "start" },

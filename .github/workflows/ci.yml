@@ -22,7 +22,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/Formula"
           sed -e 's/@VERSION@/0.1.0/g' \
               -e 's/@ARM64_SHA256@/0000000000000000000000000000000000000000000000000000000000000000/g' \
-              -e 's/@X86_64_SHA256@/0000000000000000000000000000000000000000000000000000000000000000/g' \
+              -e 's/@X86_64_SHA256@/1111111111111111111111111111111111111111111111111111111111111111/g' \
               templates/resh.rb.in > "$RUNNER_TEMP/Formula/resh.rb"
           ruby -c "$RUNNER_TEMP/Formula/resh.rb"
           brew style "$RUNNER_TEMP/Formula/resh.rb"
