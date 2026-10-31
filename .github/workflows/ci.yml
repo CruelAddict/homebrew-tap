@@ -30,3 +30,10 @@ jobs:
             ruby -c Formula/resh.rb
             brew style Formula/resh.rb
           fi
+      - name: Install and test formula
+        run: |
+          if test -f Formula/resh.rb; then
+            brew tap --custom-remote CruelAddict/tap "$GITHUB_WORKSPACE"
+            brew install CruelAddict/tap/resh
+            brew test CruelAddict/tap/resh
+          fi
