@@ -14,8 +14,7 @@ class Resh < Formula
   depends_on macos: :sequoia
 
   def install
-    libexec.install "resh", "resh_Resh.bundle", "resh.lua", "rex-actions.lua",
-                    "LICENSE", "THIRD_PARTY_NOTICES.md"
+    libexec.install "resh", "resh_Resh.bundle", "resh.lua", "rex-actions.lua", "LICENSE"
     bin.install_symlink libexec/"resh"
     (libexec/".resh-prefix").write "#{opt_libexec}\n"
   end
