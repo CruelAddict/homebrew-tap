@@ -2,13 +2,13 @@ class Resh < Formula
   desc "Native macOS project launcher for Rex"
   homepage "https://github.com/CruelAddict/resh"
   if Hardware::CPU.arm?
-    url "https://github.com/CruelAddict/resh/releases/download/v0.1.2/resh-macos-arm64.tar.gz"
-    sha256 "5624d48d491893a3cdcca7946046191d0341a88b8182dba8b87250338fcbda20"
+    url "https://github.com/CruelAddict/resh/releases/download/v0.1.3/resh-macos-arm64.tar.gz"
+    sha256 "89f4e068a6c058ce112c9766ab61ee4e4c88efa3c9d93fca79969f8b71a2ec90"
   else
-    url "https://github.com/CruelAddict/resh/releases/download/v0.1.2/resh-macos-x86_64.tar.gz"
-    sha256 "b721e4a5eda0526141873d28c55f0aac8a3e14ea28219b7fdb1b0cc2cf595e1a"
+    url "https://github.com/CruelAddict/resh/releases/download/v0.1.3/resh-macos-x86_64.tar.gz"
+    sha256 "1b16a546c51bde6a03e5416cbac1b07cd79aff950f373809704f9e57318e6752"
   end
-  version "0.1.2"
+  version "0.1.3"
   license "MIT"
 
   depends_on macos: :sequoia
