@@ -1,20 +1,17 @@
 class Resh < Formula
   desc "Native macOS project launcher for Rex"
   homepage "https://github.com/CruelAddict/resh"
+  if Hardware::CPU.arm?
+    url "https://github.com/CruelAddict/resh/releases/download/v@VERSION@/resh-macos-arm64.tar.gz"
+    sha256 "@ARM64_SHA256@"
+  else
+    url "https://github.com/CruelAddict/resh/releases/download/v@VERSION@/resh-macos-x86_64.tar.gz"
+    sha256 "@X86_64_SHA256@"
+  end
   version "@VERSION@"
   license "MIT"
 
   depends_on macos: :sequoia
-
-  on_arm do
-    url "https://github.com/CruelAddict/resh/releases/download/v#{version}/resh-macos-arm64.tar.gz"
-    sha256 "@ARM64_SHA256@"
-  end
-
-  on_intel do
-    url "https://github.com/CruelAddict/resh/releases/download/v#{version}/resh-macos-x86_64.tar.gz"
-    sha256 "@X86_64_SHA256@"
-  end
 
   def install
     libexec.install "resh", "resh_Resh.bundle", "resh.lua", "rex-actions.lua",

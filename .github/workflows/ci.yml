@@ -7,7 +7,10 @@ permissions:
 
 jobs:
   check:
-    runs-on: ubuntu-24.04
+    runs-on: macos-15
+    timeout-minutes: 10
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: "1"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -16,9 +19,14 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -v
           python3 -m py_compile scripts/update-resh.py
+          mkdir -p "$RUNNER_TEMP/Formula"
           sed -e 's/@VERSION@/0.1.0/g' \
               -e 's/@ARM64_SHA256@/0000000000000000000000000000000000000000000000000000000000000000/g' \
               -e 's/@X86_64_SHA256@/0000000000000000000000000000000000000000000000000000000000000000/g' \
-              templates/resh.rb.in > "$RUNNER_TEMP/resh.rb"
-          ruby -c "$RUNNER_TEMP/resh.rb"
-          if test -f Formula/resh.rb; then ruby -c Formula/resh.rb; fi
+              templates/resh.rb.in > "$RUNNER_TEMP/Formula/resh.rb"
+          ruby -c "$RUNNER_TEMP/Formula/resh.rb"
+          brew style "$RUNNER_TEMP/Formula/resh.rb"
+          if test -f Formula/resh.rb; then
+            ruby -c Formula/resh.rb
+            brew style Formula/resh.rb
+          fi
