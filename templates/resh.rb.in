@@ -1,0 +1,45 @@
+class Resh < Formula
+  desc "Native macOS project launcher for Rex"
+  homepage "https://github.com/CruelAddict/resh"
+  version "@VERSION@"
+  license "MIT"
+
+  depends_on macos: :sequoia
+
+  on_arm do
+    url "https://github.com/CruelAddict/resh/releases/download/v#{version}/resh-macos-arm64.tar.gz"
+    sha256 "@ARM64_SHA256@"
+  end
+
+  on_intel do
+    url "https://github.com/CruelAddict/resh/releases/download/v#{version}/resh-macos-x86_64.tar.gz"
+    sha256 "@X86_64_SHA256@"
+  end
+
+  def install
+    libexec.install "resh", "resh_Resh.bundle", "resh.lua", "rex-actions.lua",
+                    "LICENSE", "THIRD_PARTY_NOTICES.md"
+    bin.install_symlink libexec/"resh"
+  end
+
+  def caveats
+    <<~EOS
+      Install and start Rex, then enable Settings → Rex Server → Remote Control.
+      Add these lines to your Rex init.lua (normally ~/.config/rex/init.lua):
+
+        assert(loadfile("#{opt_libexec}/resh.lua"))("#{opt_bin}/resh")
+        rex.exec.start({ "#{opt_bin}/resh", "service", "start" },
+          { detach = true, stdout = false, stderr = false })
+
+      Apply with: rex config reload
+      Optional directory sources: brew install zoxide fd
+      After upgrading: rex config reload && resh service restart
+      Before uninstalling: resh service stop, then remove the lines above.
+    EOS
+  end
+
+  test do
+    assert_equal "project", shell_output("#{bin}/resh --name #{testpath}/project").strip
+    assert_match "Valid", shell_output("#{bin}/resh --check-config")
+  end
+end

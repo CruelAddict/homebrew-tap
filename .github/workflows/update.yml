@@ -1,0 +1,45 @@
+name: Update resh
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-resh
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      attestations: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Verify upstream release and generate formula
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 -m unittest discover -s tests -v
+          python3 scripts/update-resh.py
+      - name: Check formula
+        run: |
+          if test -f Formula/resh.rb; then ruby -c Formula/resh.rb; fi
+      - name: Publish formula update
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add Formula
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Update resh from verified upstream release'
+          gh auth setup-git
+          git push
