@@ -14,8 +14,8 @@ class Resh < Formula
   depends_on macos: :sequoia
 
   def install
-    libexec.install "resh", "resh_Resh.bundle", "resh.lua", "rex-actions.lua", "LICENSE"
-    bin.install_symlink libexec/"resh"
+    libexec.install "resh", "resh_Resh.bundle", "resh.lua", "rex-actions.lua"
+    bin.write_exec_script libexec/"resh"
     (libexec/".resh-prefix").write "#{opt_libexec}\n"
   end
 
@@ -32,6 +32,7 @@ class Resh < Formula
   end
 
   test do
+    assert_match "Usage: resh setup", shell_output("#{bin}/resh setup --help")
     assert_equal "project", shell_output("#{bin}/resh --name #{testpath}/project").strip
     assert_match "Valid", shell_output("#{bin}/resh --check-config")
   end
