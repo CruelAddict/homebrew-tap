@@ -14,11 +14,12 @@ class Resh < Formula
   depends_on macos: :sequoia
 
   def install
-    libexec.install "resh", "resh_Resh.bundle", "resh.lua", "rex-actions.lua"
-    inreplace libexec/"resh.lua",
-              'local executable = os.getenv("HOME") .. "/Library/Application Support/resh/resh"',
-              "local executable = #{(opt_libexec/"resh").to_s.dump}"
-    bin.write_exec_script opt_libexec/"resh"
+    libexec.install "resh", "resh_Resh.bundle", "rex-actions.lua"
+    bin.install_symlink libexec/"resh"
+    # Existing installations load this file through a link to opt_libexec.
+    (libexec/"resh.lua").write Utils.safe_popen_read(
+      libexec/"resh", "print-rex-startup-lua", "--executable", HOMEBREW_PREFIX/"bin/resh"
+    )
   end
 
   def caveats
@@ -27,6 +28,7 @@ class Resh < Formula
 
   test do
     assert_match "Usage: resh setup", shell_output("#{bin}/resh setup --help")
+    assert_match 'name = "resh_serve"', shell_output("#{bin}/resh print-rex-startup-lua")
     assert_equal "project", shell_output("#{bin}/resh --name #{testpath}/project").strip
     assert_match "Valid", shell_output("#{bin}/resh --check-config")
   end
