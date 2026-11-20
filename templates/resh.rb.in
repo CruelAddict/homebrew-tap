@@ -23,7 +23,7 @@ class Resh < Formula
   end
 
   def caveats
-    "Enable Rex Settings → Rex Server → Remote Control for session switching."
+    "Make sure Remote Control is enabled in Rex Settings → Rex Server."
   end
 
   test do
