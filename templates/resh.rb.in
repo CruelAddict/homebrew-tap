@@ -23,7 +23,12 @@ class Resh < Formula
   end
 
   def caveats
-    "Make sure Remote Control is enabled in Rex Settings → Rex Server."
+    <<~EOS
+      To complete the installation, run:
+        resh setup
+
+      Make sure Remote Control is enabled in Rex Settings → Rex Server.
+    EOS
   end
 
   test do
